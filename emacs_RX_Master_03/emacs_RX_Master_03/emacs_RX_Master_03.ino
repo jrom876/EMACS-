@@ -485,7 +485,6 @@ void buzz_routine_2(void) {
 //=======================================
 //=== Compliance and Control Routines ===
 //=======================================
-
 /*  
  *  triage_msg() 
  *  alm_routine(Alarm_type alm)
@@ -965,9 +964,6 @@ void serialCommOutput() {
   }
 }
 
-  /// 0x0A == LF
-  /// 0x0D == CR
-  
 //================================
 //================================
 /// https://forum.arduino.cc/t/serial-input-from-multiple-characters/863789/6
@@ -989,9 +985,7 @@ void recvWithEndMarker(char rc) {
         receivedChars[ndx] = '\0'; // terminate the string
         ndx = 0;
         newData = true;
-    }        
-//    cmd_decision_tree();
-//    send_ping_cmd_target(PingMessage);
+    } 
 }
 
 void showNewData() {
