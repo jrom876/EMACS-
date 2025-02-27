@@ -260,16 +260,9 @@ void setup(void) {
 //===========================
 //======== Main Loop ========
 //===========================
-
 void loop(void) {
   receive_data();
   serialCommOutput();
-  
-  //cmd_decision_tree();  
-  //send_ping_cmd_target(PingMessage);
-
-//  recvWithEndMarker();
-//  showNewData();
 }
 
 //===========================
