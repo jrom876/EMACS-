@@ -711,7 +711,7 @@ void serialCommOutput() {
       delay(5000);  
     }
     else if (c == 'S') {
-      Serial.println("\n*** CHANGING MASTER TO CH 81");
+      Serial.println("\n*** CHANGING NODE TO CH 81");
       setupTXRadio(1, 81, PA_MIN); 
       delay(5000);
     } 
