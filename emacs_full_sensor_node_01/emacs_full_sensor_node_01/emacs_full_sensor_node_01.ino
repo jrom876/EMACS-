@@ -267,9 +267,10 @@ struct dataStruct SentMessage[1] = {0};
 //// Used to store cmd ping messages received from the Master
 struct pingCmd PongMessage[1] = {0}; 
 
-//=====================================
-//======= SEN-12642 IRQ HANDLER =======
-//=====================================
+//============================
+//======= IRQ HANDLERs =======
+//============================
+
 /** https://reference.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
 
 mode: defines when the interrupt should be triggered. 
@@ -280,6 +281,10 @@ CHANGE  to trigger the interrupt whenever the pin changes value
 RISING  to trigger when the pin goes from low to high,
 FALLING for when the pin goes from high to low.
 **/
+
+//=====================================
+//======= SEN-12642 IRQ HANDLER =======
+//=====================================
 //////////////////////////////
 // audioISR()
 // This function is installed as an interrupt service routine for the GATE pin
