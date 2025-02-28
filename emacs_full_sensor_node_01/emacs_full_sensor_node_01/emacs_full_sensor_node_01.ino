@@ -354,7 +354,7 @@ void setup() {
   pinMode(PIN_AUDIO_IN,INPUT); // Pin A2
 
   initRadioValues(5, 81, PA_MIN);
-  setupTXRadio(radNum,chNum,pwrNum); // (radio number, channel number) 
+  setupTXRadio(radNum,chNum,pwrNum); // (radio number, channel number, power amp setting) 
 }
 
 //==========================
