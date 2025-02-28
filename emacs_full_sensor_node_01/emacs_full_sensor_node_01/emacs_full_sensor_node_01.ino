@@ -12,7 +12,6 @@
 
     Copyright (C) 2025 
     Jacob Romero, Creative Engineering Solutions, LLC
-    cesllc876@gmail.com
 
     EMACS COTS Hardware:    
       nRF24L01      2.4 GHz Transceiver
