@@ -374,7 +374,7 @@ void loop() {
    
   delay(10); 
   receive_msg();  
-  //serialCommOutput();
+  serialCommOutput();
 
 /*  readDHT();
   delay(2000);
@@ -401,21 +401,7 @@ void sendMessage(bool validCO2Flag){
       delay(10000);
   }
 }
-
-//================================
-//======= Transmit Methods =======
-//================================
-  void transmit_co2(void){
-    SentMessage[0].co2_val = co2Num;
-    Serial.print("CO2: ");
-    Serial.println(String(co2Num)+" ppm");
-    respFlag = true;    
-    transmit_response_to_RX(respFlag);
-    radio.write(&SentMessage, sizeof(SentMessage));
-    Serial.println("DEBUG:\tCO2 Message Sent");  
-    //delay(2000);
-  }
-  
+ 
 //===============================
 //======= Receive Message =======
 //===============================
@@ -675,23 +661,8 @@ void pack_sent_msg() {
     SentMessage[0].ping.tar_cmd = tarNum;
     SentMessage[0].ping.alm_cmd = almNum;
     SentMessage[0].ping.dng_cmd = dngNum;
-    
-//    Serial.println("Response chNum: "+String(SentMessage[0].chNum));
-//    Serial.println("Response rn: "+String(SentMessage[0].radNum));
-//    Serial.println("Response CO2: "+String(SentMessage[0].co2_val));
-//    Serial.println("Response Humid: "+String(SentMessage[0].h_val));    
-//    Serial.println("Response Deg C: "+String(SentMessage[0].c_val));    
-//    Serial.println("Response Deg F: "+String(SentMessage[0].f_val));    
-//    Serial.println("Response PIR: "+String(SentMessage[0].pir_state));    
-//    Serial.println("Response Audio: "+String(SentMessage[0].audio_gate));
-    
-//    Serial.println("\nResponse CMD Type: "  +String(SentMessage[0].ping.my_cmd));
-//    Serial.println("Response Channel: "     +String(SentMessage[0].ping.ch_cmd));
-//    Serial.println("Response Radio Number: "+String(SentMessage[0].ping.r_cmd));
-//    Serial.println("Response Pwr Level: "   +String(SentMessage[0].ping.pa_cmd));
-//    Serial.println("Response Target Number: "   +String(WAIT));
-//    Serial.println("Response Alarm Type: "  +String(SentMessage[0].ping.alm_cmd));
-//    Serial.println("Response Danger Level: "+String(SentMessage[0].ping.dng_cmd)+"\n");
+
+    //printDebugMsg(SentMessage);
 }
 
 //========================================//
@@ -742,51 +713,6 @@ void serialCommOutput() {
     Serial.println("\n*** Serial Command sent to TX...Good Luck...");
     radio.startListening(); 
   }
-}
-
-//===============================================
-//======= Send Response Message to Master =======
-//===============================================                                   
-void send_response(){
-    //SentMessage[0] = {0};
-    SentMessage[0].chNum = chNum;
-    SentMessage[0].radNum = radNum;
-    SentMessage[0].co2_val = co2Num;
-    SentMessage[0].h_val = hNum;
-    SentMessage[0].c_val = tNum;
-    SentMessage[0].f_val = fNum;
-    SentMessage[0].pir_state = pirNum;
-    SentMessage[0].audio_gate = gateNum;
-    
-    Serial.println("Response chNum: "+String(SentMessage[0].chNum));
-    Serial.println("Response rn: "+String(SentMessage[0].radNum));
-    Serial.println("Response CO2: "+String(SentMessage[0].co2_val));
-    Serial.println("Response Humid: "+String(SentMessage[0].h_val));    
-    Serial.println("Response Deg C: "+String(SentMessage[0].c_val));    
-    Serial.println("Response Deg F: "+String(SentMessage[0].f_val));    
-    Serial.println("Response PIR: "+String(SentMessage[0].pir_state));    
-    Serial.println("Response Audio: "+String(SentMessage[0].audio_gate));
-    
-    SentMessage[0].ping.my_cmd = response;
-    SentMessage[0].ping.ch_cmd = chNum;   //radio.getChannel();
-    SentMessage[0].ping.r_cmd = radNum;
-    SentMessage[0].ping.pa_cmd = pwrNum;
-    SentMessage[0].ping.tar_cmd = tarNum;
-    SentMessage[0].ping.alm_cmd = almNum;
-    SentMessage[0].ping.dng_cmd = dngNum;
-    
-    Serial.println("\nResponse CMD Type: "      +String(SentMessage[0].ping.my_cmd));
-    Serial.println("Response Channel: "         +String(SentMessage[0].ping.ch_cmd));
-    Serial.println("Response Radio Number: "    +String(SentMessage[0].ping.r_cmd));
-    Serial.println("Response Pwr Level: "       +String(SentMessage[0].ping.pa_cmd));
-    Serial.println("Response Target Number: "   +String(SentMessage[0].ping.tar_cmd));
-    Serial.println("Response Alarm Type: "      +String(SentMessage[0].ping.alm_cmd));
-    Serial.println("Response Danger Level: "    +String(SentMessage[0].ping.dng_cmd)+"\n");
- 
-    radio.stopListening(); // Change to TX role just long enough to ping cmd     
-    radio.openWritingPipe(addresses[0]);
-    radio.write(&SentMessage, sizeof(SentMessage));
-    radio.startListening();
 }
 
 //==================================
@@ -854,27 +780,11 @@ void transmit_audio_gate(bool agate){
 //=========================================
 void transmit_response_to_RX(bool respFlag){
   // if we received a pong command message...
-  if (respFlag){
+  if (respFlag){ 
+       
     pack_sent_msg(); 
-    triage_data(); 
-
-//    Serial.println("Transmit Response to RX\n");
-//    Serial.println("SentMessage chNum: "+String(SentMessage[0].chNum));
-//    Serial.println("SentMessage rn: "+String(SentMessage[0].radNum));
-//    Serial.println("SentMessage CO2: "+String(SentMessage[0].co2_val));
-//    Serial.println("SentMessage Humid: "+String(SentMessage[0].h_val));    
-//    Serial.println("SentMessage Deg C: "+String(SentMessage[0].c_val));    
-//    Serial.println("SentMessage Deg F: "+String(SentMessage[0].f_val));    
-//    Serial.println("SentMessage  PIR: "+String(SentMessage[0].pir_state));    
-//    Serial.println("SentMessage  Audio: "+String(SentMessage[0].audio_gate));
-//
-//    Serial.println("\nSentMessage  CMD Type: "  +String(SentMessage[0].ping.my_cmd));
-//    Serial.println("SentMessage  Channel: "     +String(SentMessage[0].ping.ch_cmd));
-//    Serial.println("SentMessage  Radio Number: "+String(SentMessage[0].ping.r_cmd));
-//    Serial.println("SentMessage  Pwr Level: "   +String(SentMessage[0].ping.pa_cmd));
-//    Serial.println("SentMessage  tar State: "   +String(SentMessage[0].ping.tar_cmd));    
-//    Serial.println("\nSentMessage  Alarm Type: "  +String(SentMessage[0].ping.alm_cmd));
-//    Serial.println("SentMessage  Danger Level: "+String(SentMessage[0].ping.dng_cmd)+"\n");
+    triage_data();    
+    //printDebugMsg(SentMessage); 
   
     radio.stopListening(); // Sets radio to TX mode
     radio.write(&SentMessage, sizeof(SentMessage)); // Transmits the message
@@ -883,7 +793,7 @@ void transmit_response_to_RX(bool respFlag){
     
     delay(1000);  // Allow message to transmit
     Serial.println("DEBUG: Response Sent to Master "+String(respFlag));
-    respFlag = false;  // must be reset to false before end of function
+    respFlag = false;  // Must be reset to false before end of function
     Serial.println();
   }
 }
@@ -959,131 +869,27 @@ void initRadioValues(int rn,int mychannel,PA_type pat) {
     pwrNum = pat;
 }
 
+void printDebugMsg(dataStruct SM[1]) {
+  
+    Serial.println("\nDEBUG PRINT");
+    Serial.println("Message chNum: \t"+String(SM[0].chNum));
+    Serial.println("Message rn: \t"   +String(SM[0].radNum));
+    Serial.println("Message CO2: \t"  +String(SM[0].co2_val));
+    Serial.println("Message Humid: \t"+String(SM[0].h_val));    
+    Serial.println("Message Deg C: \t"+String(SM[0].c_val));    
+    Serial.println("Message Deg F: \t"+String(SM[0].f_val));    
+    Serial.println("Message PIR: \t"  +String(SM[0].pir_state));    
+    Serial.println("Message Audio: \t"+String(SM[0].audio_gate));
+
+    Serial.println("\nMessage CMD Type: \t"  +String(SM[0].ping.my_cmd));
+    Serial.println("Message Channel: \t"     +String(SM[0].ping.ch_cmd));
+    Serial.println("Message Radio Number: \t"+String(SM[0].ping.r_cmd));
+    Serial.println("Message Pwr Level: \t"   +String(SM[0].ping.pa_cmd));
+    Serial.println("Message tar State: \t"   +String(SM[0].ping.tar_cmd));    
+    Serial.println("\nMessage Alarm Type: \t"+String(SM[0].ping.alm_cmd));
+    Serial.println("Message Danger Level: \t"+String(SM[0].ping.dng_cmd)+"\n");
+}
 
 /*--------------------------------------------------------------*/
 /*------------ End of emacs_full_sensor_node_01.ino ------------*/
 /*--------------------------------------------------------------*/
-
-//=============================================== //
-// ======= Comments and Experimental Code ======= //
-//=============================================== //
-
-/*
-//===========================
-//=== Send Message Method ===
-//===========================
-void sendMessage(bool validCO2Flag){
-  if (validCO2Flag){ // If we get a valid CO2 reading
-      Serial.println("Radio: "+String(SentMessage[0].radNum));
-      Serial.println("Channel: "+String(SentMessage[0].chNum));
-      transmit_all();
-      validCO2Flag = false;
-  }
-  else {
-//    SentMessage[0] = 0;
-    radio.write(SentMessage, 1);
-  }
-}
-
-//================================
-//======= Transmit Methods =======
-//================================
-
-  void transmit_all(void){
-    SentMessage[0].co2_val = co2;
-    SentMessage[0].h_val = h;
-    SentMessage[0].c_val = t;
-    SentMessage[0].f_val = f;
-    Serial.println("CO2 Value: "+String(SentMessage[0].co2_val)+" ppm");
-    Serial.print("Humidity: "+String(h)+"%  ");
-    Serial.print("Temp: "+String(SentMessage[0].c_val)+" degrees C ");
-    Serial.println("Temp: "+String(SentMessage[0].f_val)+" degrees F ");
-    radio.write(&SentMessage, sizeof(SentMessage));
-    //delay(2000);
-  }
-*/
-       
-//    Serial.println("\nBegin Triage\n "); 
-//    Serial.println("Temporary chNum: "+String(TempMessage[0].chNum));
-//    Serial.println("Temporary rn: "+String(TempMessage[0].radNum));
-//    Serial.println("Temporary CO2: "+String(TempMessage[0].co2_val));
-//    Serial.println("Temporary Humid: "+String(TempMessage[0].h_val));    
-//    Serial.println("Temporary Deg C: "+String(TempMessage[0].c_val));    
-//    Serial.println("Temporary Deg F: "+String(TempMessage[0].f_val));    
-//    Serial.println("Temporary PIR: "+String(TempMessage[0].pir_state));    
-//    Serial.println("Temporary Audio: "+String(TempMessage[0].audio_gate));
-//
-//    Serial.println("\nTemporary CMD Type: "  +String(TempMessage[0].ping.my_cmd));
-//    Serial.println("Temporary Channel: "     +String(TempMessage[0].ping.ch_cmd));
-//    Serial.println("Temporary Radio Number: "+String(TempMessage[0].ping.r_cmd));
-//    Serial.println("Temporary Pwr Level: "   +String(TempMessage[0].ping.pa_cmd));
-//    Serial.println("Temporary tar State: "   +String(TempMessage[0].ping.tar_cmd));
-//    Serial.println("Temporary Alarm Type: "  +String(TempMessage[0].ping.alm_cmd));
-//    Serial.println("Temporary Danger Level: "+String(TempMessage[0].ping.dng_cmd)+"\n");
-         
-    
-//    Serial.println("SentMessage chNum: "+String(SentMessage[0].chNum));
-//    Serial.println("SentMessage rn: "+String(SentMessage[0].radNum));
-//    Serial.println("SentMessage CO2: "+String(SentMessage[0].co2_val));
-//    Serial.println("SentMessage Humid: "+String(SentMessage[0].h_val));    
-//    Serial.println("SentMessage Deg C: "+String(SentMessage[0].c_val));    
-//    Serial.println("SentMessage Deg F: "+String(SentMessage[0].f_val));    
-//    Serial.println("SentMessage  PIR: "+String(SentMessage[0].pir_state));    
-//    Serial.println("SentMessage  Audio: "+String(SentMessage[0].audio_gate));
-//
-//    Serial.println("\nSentMessage  CMD Type: "  +String(SentMessage[0].ping.my_cmd));
-//    Serial.println("SentMessage  Channel: "     +String(SentMessage[0].ping.ch_cmd));
-//    Serial.println("SentMessage  Radio Number: "+String(SentMessage[0].ping.r_cmd));
-//    Serial.println("SentMessage  Pwr Level: "   +String(SentMessage[0].ping.pa_cmd));
-//    Serial.println("SentMessage  tar State: "   +String(SentMessage[0].ping.tar_cmd));    
-//    Serial.println("\nSentMessage  Alarm Type: "  +String(SentMessage[0].ping.alm_cmd));
-//    Serial.println("SentMessage  Danger Level: "+String(SentMessage[0].ping.dng_cmd)+"\n");
-
-
-//===============================================
-//======= Send Response Message to Master =======
-//===============================================
-void send_response(cmd_type cmd, int ch, int rn, PA_type pat, 
-                   int ak, Alarm_type alm, Dng_level dng){
-    //SentMessage[0] = {0};
-    SentMessage[0].chNum = ch;
-    SentMessage[0].radNum = rn;
-    SentMessage[0].co2_val = co2Num;
-    SentMessage[0].h_val = hNum;
-    SentMessage[0].c_val = tNum;
-    SentMessage[0].f_val = fNum;
-    SentMessage[0].pir_state = pirNum;
-    SentMessage[0].audio_gate = gateNum;
-    
-    Serial.println("Response chNum: "+String(SentMessage[0].chNum));
-    Serial.println("Response rn: "+String(SentMessage[0].radNum));
-    Serial.println("Response CO2: "+String(SentMessage[0].co2_val));
-    Serial.println("Response Humid: "+String(SentMessage[0].h_val));    
-    Serial.println("Response Deg C: "+String(SentMessage[0].c_val));    
-    Serial.println("Response Deg F: "+String(SentMessage[0].f_val));    
-    Serial.println("Response PIR: "+String(SentMessage[0].pir_state));    
-    Serial.println("Response Audio: "+String(SentMessage[0].audio_gate));
-    
-    SentMessage[0].ping.my_cmd = cmd;
-    SentMessage[0].ping.ch_cmd = ch;
-    SentMessage[0].ping.r_cmd = rn;
-    SentMessage[0].ping.pa_cmd = pat;
-    SentMessage[0].ping.tar_cmd = ak;
-    SentMessage[0].ping.alm_cmd = alm;
-    SentMessage[0].ping.dng_cmd = dng;
-    
-    Serial.println("\nResponse CMD Type: "  +String(SentMessage[0].ping.my_cmd));
-    Serial.println("Response Channel: "     +String(SentMessage[0].ping.ch_cmd));
-    Serial.println("Response Radio Number: "+String(SentMessage[0].ping.r_cmd));
-    Serial.println("Response Pwr Level: "   +String(SentMessage[0].ping.pa_cmd));
-    Serial.println("Response tar State: "   +String(SentMessage[0].ping.tar_cmd));
-    Serial.println("Response Alarm Type: "  +String(SentMessage[0].ping.alm_cmd));
-    Serial.println("Response Danger Level: "+String(SentMessage[0].ping.dng_cmd)+"\n");
-    
-//    Serial.println("Response tar State: "+String(SentMessage[0].ping.tar_cmd));
-
-    radio.stopListening(); // Change to TX role just long enough to ping cmd     
-    radio.openWritingPipe(addresses[0]);
-    radio.write(&SentMessage, sizeof(SentMessage));
-    radio.startListening();
-}
