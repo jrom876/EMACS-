@@ -397,9 +397,9 @@ void loop() {
   } */ 
 }
 
-//===========================
-//=== Send Message Method ===
-//===========================
+//========================
+//=== Send CO2 Message ===
+//========================
 void sendMessage(bool validCO2Flag){
   if (validCO2Flag){ // If we get a valid CO2 reading 
       transmit_response_to_RX(respFlag = true);
