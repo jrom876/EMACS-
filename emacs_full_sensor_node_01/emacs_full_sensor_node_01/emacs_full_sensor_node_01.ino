@@ -268,7 +268,7 @@ struct dataStruct SentMessage[1] = {0};
 struct pingCmd PongMessage[1] = {0}; 
 
 //============================
-//======= IRQ HANDLERs =======
+//======= IRQ HANDLERS =======
 //============================
 
 /** https://reference.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
