@@ -12,7 +12,6 @@
 
     Copyright (C) 2025 
     Jacob Romero, Creative Engineering Solutions, LLC
-    cesllc876@gmail.com
 
     EMACS Hardware:    
       nRF24L01      2.4 GHz Transceiver
@@ -207,10 +206,10 @@ struct dataStruct ReceivedMessage[1] = {0};
 struct pingCmd PingMessage[1] = {}; 
 
 int   sensorOffset = 0;
+
 //===============================
 //======= MESSAGE HANDLER =======
 //===============================
-
 //////////////////////////////
 // msgISR()
 // This function is installed as an interrupt service routine for the nRF24 
